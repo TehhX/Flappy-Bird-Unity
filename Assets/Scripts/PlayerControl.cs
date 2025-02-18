@@ -1,11 +1,14 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum Playstate {
     playing,
     slowing,
+    over
 }
 
 public class PlayerControl : MonoBehaviour {
+    public TextMesh gameOverText;
     public static Playstate playState = Playstate.playing;
 
     private Rigidbody2D rb;
@@ -18,6 +21,8 @@ public class PlayerControl : MonoBehaviour {
     }
 
     private void Update() {
+        Debug.Log("PlayerUpdate");
+
         if (playState == Playstate.playing && Input.GetKeyDown(KeyCode.Space))
             rb.linearVelocityY = force;
         
@@ -59,6 +64,7 @@ public class PlayerControl : MonoBehaviour {
 
             else {
                 PipeLogic.speed = 0;
+                playState = Playstate.over;
                 gameOver();
             }
         }
@@ -68,6 +74,7 @@ public class PlayerControl : MonoBehaviour {
     }
 
     private void gameOver() {
-        
+        Instantiate(gameOverText);
+        Destroy(gameObject);
     }
 }

@@ -12,10 +12,14 @@ public class PipeBirth : MonoBehaviour {
     }
 
     private void Update() {
+        Debug.Log("BirthUpdate");
+
+        if (PlayerControl.playState == Playstate.over)
+            Destroy(gameObject);
+
         if (timer >= pipeDelay) {
             timer = 0f;
-            if (PlayerControl.playState == Playstate.playing)
-                newPipes();
+            newPipes();
         }
 
         else
