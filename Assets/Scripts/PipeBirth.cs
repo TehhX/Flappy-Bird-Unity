@@ -14,7 +14,7 @@ public class PipeBirth : MonoBehaviour {
     private void Update() {
         if (timer >= pipeDelay) {
             timer = 0f;
-            if (PlayerControl.playState != Playstate.endOver)
+            if (PlayerControl.playState == Playstate.playing)
                 newPipes();
         }
 
