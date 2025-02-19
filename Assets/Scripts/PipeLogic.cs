@@ -3,7 +3,7 @@ using UnityEngine;
 public class PipeLogic : MonoBehaviour {
     public GameObject gameReset;
 
-    public const float startingSpeed = 5f;
+    public const float startingSpeed = 8.5f;
 
     public const float leftBound = -7.0f;
     public static float speed = startingSpeed;

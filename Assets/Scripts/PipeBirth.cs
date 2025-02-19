@@ -1,31 +1,23 @@
 using UnityEngine;
 
 public class PipeBirth : MonoBehaviour {
-    public float maxOffset;
-    public float pipeDelay;
+    public float pipeDelay = 0.3f;
     public GameObject pipes;
 
-    private float timer = 0;
-
-    private void Start() {
-        newPipes();
-    }
+    private float maxOffset = 3.4f;
+    private float timer = 0f;
 
     private void Update() {
-        if (PlayerControl.playState == Playstate.over)
-            Destroy(gameObject);
-
-        if (timer >= pipeDelay) {
-            timer = 0f;
+        if (timer >= pipeDelay)
             newPipes();
-        }
 
         else
             timer += Time.deltaTime;
     }
     
-    private void newPipes() {
+    public void newPipes() {
         GameObject newPipes = Instantiate(pipes);
         newPipes.transform.position += new Vector3(0, Random.Range(-maxOffset, maxOffset), 0);
+        timer = 0f;
     }
 }
