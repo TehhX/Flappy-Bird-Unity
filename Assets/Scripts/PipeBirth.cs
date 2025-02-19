@@ -12,8 +12,6 @@ public class PipeBirth : MonoBehaviour {
     }
 
     private void Update() {
-        Debug.Log("BirthUpdate");
-
         if (PlayerControl.playState == Playstate.over)
             Destroy(gameObject);
 

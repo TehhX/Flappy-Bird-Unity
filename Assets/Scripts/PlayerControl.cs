@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public enum Playstate {
     playing,
@@ -8,26 +7,24 @@ public enum Playstate {
 }
 
 public class PlayerControl : MonoBehaviour {
-    public TextMesh gameOverText;
-    public static Playstate playState = Playstate.playing;
+    public TextMesh pointText;
+    public static Playstate playState ;
+    public PipeLogic pipeLogic;
 
+    private int points;
     private Rigidbody2D rb;
     private float force = 9.25f;
-    private float speedDecrement = PipeLogic.speed * 0.5f;
-    private float speedTimer = 0;
 
     private void Start() {
+        pipeLogic = GameObject.Find("PipeLogic").GetComponent<PipeLogic>();
+        playState = Playstate.playing;
+        points = 0;
         rb = GetComponent<Rigidbody2D>();
     }
 
     private void Update() {
-        Debug.Log("PlayerUpdate");
-
         if (playState == Playstate.playing && Input.GetKeyDown(KeyCode.Space))
             rb.linearVelocityY = force;
-        
-        else if (playState == Playstate.slowing)
-            slowDown();
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {
@@ -35,46 +32,43 @@ public class PlayerControl : MonoBehaviour {
 
         string parentName = collision.gameObject.transform.parent.name;
         string childName = collision.collider.name;
+
+        if (childName == "VertCollider") {
+            if (parentName == "Higher")
+                rb.linearVelocity = new Vector2(bounceForce / 2, -bounceForce / 4);
+
+            else if (parentName == "Lower")
+                rb.linearVelocity = new Vector2(bounceForce / 2, bounceForce);
+
+            else
+                throw new UnityException("Unknown collider hit.");
+        }
         
-        if (parentName == "Higher" && childName == "VertCollider") {
-            rb.linearVelocity = new Vector2(bounceForce / 2, -bounceForce / 4);
-            removeControl();
-        }
-
-        else if (parentName == "Lower" && childName == "VertCollider") {
-            rb.linearVelocity = new Vector2(bounceForce / 2, bounceForce);
-            removeControl();
-        }
-
-        else if (childName == "LeftCollider") {
+        else if (childName == "LeftCollider")
             rb.linearVelocity = new Vector2(-bounceForce, bounceForce / 2);
+
+        else
+            throw new UnityException("Unknown collider hit.");
+
+        removeControl();
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision) {
+        if (collision.name == "PointTrigger")
+            incrementPoints();
+
+        else if (collision.name == "Floor")
             removeControl();
-        }
     }
 
     private void removeControl() {
         playState = Playstate.slowing;
+        pipeLogic.enabled = true;
         GetComponent<CircleCollider2D>().enabled = false;
     }
 
-    private void slowDown() {
-        if (speedTimer > 0.12f) {
-            if (PipeLogic.speed > 0.01f)
-                PipeLogic.speed -= speedDecrement * Time.deltaTime;
-
-            else {
-                PipeLogic.speed = 0;
-                playState = Playstate.over;
-                gameOver();
-            }
-        }
-
-        else
-            speedTimer += Time.deltaTime;
-    }
-
-    private void gameOver() {
-        Instantiate(gameOverText);
-        Destroy(gameObject);
+    public void incrementPoints() {
+        ++points;
+        pointText.text = points + "";
     }
 }
