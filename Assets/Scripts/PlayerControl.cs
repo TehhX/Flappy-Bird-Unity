@@ -12,8 +12,8 @@ public class PlayerControl : MonoBehaviour {
     private PipeLogic pipeLogic;
     private CircleCollider2D cc2d;
     public static Playstate playState;
-    
-    private int points;
+    public int points;
+
     private Rigidbody2D rb;
     private float force = 13f;
 

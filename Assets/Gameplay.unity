@@ -542,6 +542,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerAsset: {fileID: 1293303545424821593, guid: b7642199f903e334bbb750d1f88cec88, type: 3}
+  gameOverTextPrefab: {fileID: 3644304635115542358, guid: 08b9b4a66f046e843855ad4202a099fe, type: 3}
 --- !u!4 &701553154
 Transform:
   m_ObjectHideFlags: 0
