@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public enum Playstate {
@@ -14,7 +15,7 @@ public class PlayerControl : MonoBehaviour {
     
     private int points;
     private Rigidbody2D rb;
-    private float force = 9.25f;
+    private float force = 13f;
 
     private void Start() {
         cc2d = GetComponent<CircleCollider2D>();
@@ -34,10 +35,19 @@ public class PlayerControl : MonoBehaviour {
     private void OnCollisionEnter2D(Collision2D collision) {
         const float bounceForce = 7f;
 
-        string parentName = collision.gameObject.transform.parent.name;
+        string parentName;
+        try {
+            parentName = collision.gameObject.transform.parent.name;
+        } catch (NullReferenceException) {
+            parentName = "NoParent";
+        }
+        
         string childName = collision.collider.name;
 
-        if (childName == "LeftCollider")
+        if (childName == "Ceiling")
+            return;
+
+        else if (childName == "LeftCollider")
             rb.linearVelocity = new Vector2(-bounceForce * 3f, bounceForce);
 
         else if (parentName == "Higher") {
